@@ -27,7 +27,7 @@ def delete(db: Session, post: Post):
 
 
 def patch_post(db: Session, post_id: int, post_update: PostUpdate):
-    db_post = db.query(Post).filter(Post.id == post_id).first()
+    db_post = get_post(db, post_id)
     if db_post:
         for field, value in post_update.dict(exclude_unset=True).items():
             setattr(db_post, field, value)
