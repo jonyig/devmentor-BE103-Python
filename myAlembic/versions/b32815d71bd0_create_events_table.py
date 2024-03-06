@@ -1,8 +1,8 @@
-"""create event_list table
+"""create event table
 
-Revision ID: 9ec061e0460e
-Revises: b32815d71bd0
-Create Date: 2024-03-05 02:57:48.544586
+Revision ID: b32815d71bd0
+Revises: b75f98bad312
+Create Date: 2024-03-05 02:56:19.510526
 
 """
 from typing import Sequence, Union
@@ -12,23 +12,25 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '9ec061e0460e'
-down_revision: Union[str, None] = 'b32815d71bd0'
+revision: str = 'b32815d71bd0'
+down_revision: Union[str, None] = 'b75f98bad312'
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:
     op.create_table(
-        "event_list",
+        "events",
         sa.Column("id", sa.Integer(), primary_key=True),
+        sa.Column("name", sa.String(length=255), nullable=False),
+        sa.Column("date", sa.String(length=255), nullable=False),
+        sa.Column("content", sa.String(length=255), nullable=False),
         sa.Column("user_id", sa.Integer(), nullable=False),
-        sa.Column("event_id", sa.Integer(), nullable=False),
     )
     pass
 
 
 def downgrade() -> None:
-    op.drop_table("event_list")
+    op.drop_table("events")
     pass
 

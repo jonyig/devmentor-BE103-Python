@@ -20,7 +20,7 @@ depends_on: Union[str, Sequence[str], None] = None
 
 def upgrade() -> None:
     op.create_table(
-        "user",
+        "users",
         sa.Column("id", sa.Integer(), primary_key=True),
         sa.Column("lang_id", sa.Integer(), nullable=False),
         sa.Column("username", sa.String(length=255), nullable=False),
@@ -30,6 +30,6 @@ def upgrade() -> None:
 
 
 def downgrade() -> None:
-    op.drop_table("user")
+    op.drop_table("users")
     pass
 
