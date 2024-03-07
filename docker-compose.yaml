@@ -13,7 +13,7 @@ services:
     image: library/mysql:8.0
     container_name: mysql80
     ports:
-      - 3306:3306
+      - 3307:3306
     volumes:
       - ./data/mysql-80:/var/lib/mysql
       - ./config/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
