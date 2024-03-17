@@ -3,7 +3,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
 from infrastructure.mysql import get_db
-from schema.database.userfordb import User
+from repository.login import search
 
 
 router = APIRouter(
@@ -12,13 +12,12 @@ router = APIRouter(
 )
 
 @router.post("/token")
-def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
-    query = db.query(User).filter(User.username == form_data.username)
-    user = query.first()
-    if not user:
-        raise HTTPException(status_code=400, detail="Incorrect username or password")
-    if not form_data.password == user.password:
-        raise HTTPException(status_code=400, detail="Incorrect username or password")
+def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)): #接受用戶給的http request&給回應(API Controller)
+    user = search(db, form_data.username)
+    if not user: #處理請求、計算、驗證等(?)在這裡是做比較formdata是否存在於db裡  (service)
+        raise HTTPException(status_code=400, detail="Incorrect username or password")  #給回應(API controller)
+    if not form_data.password == user.password: #service
+        raise HTTPException(status_code=400, detail="Incorrect username or password") #給回應(API controller)
 
     return {"access_token": user.username, "token_type": "bearer"}
 
