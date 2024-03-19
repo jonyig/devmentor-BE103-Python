@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from infrastructure.mysql import get_db
 from service.auth import validate_login, fake_decode_token
 from schema.database.user import User
-from repository.users import get_user
+from repository.user import get_user
 
 
 router = APIRouter(

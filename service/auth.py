@@ -1,6 +1,6 @@
 from schema.database.user import User
 from sqlalchemy.orm import Session
-from repository.users import get_user
+from repository.user import get_user
 
 def validate_login(db: Session, form_data_username: str, form_data_password: str) -> User:
     user = get_user(db, form_data_username)
