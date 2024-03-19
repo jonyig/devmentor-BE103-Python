@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from schema.database.userfordb import User
+from schema.database.users import User
 
 
 def search(db: Session, username: str):

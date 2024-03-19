@@ -1,7 +1,7 @@
 from fastapi import HTTPException
-from schema.database.userfordb import User
+from schema.database.users import User
 from sqlalchemy.orm import Session
-from repository.login import search
+from repository.users import search
 
 def validate_login(db: Session, form_data_username: str, form_data_password: str) -> tuple[User, str]:
     user = search(db, form_data_username)
