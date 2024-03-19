@@ -1,12 +1,12 @@
-from pydantic import BaseModel
+from sqlalchemy import Column, Integer, String
+from sqlalchemy.ext.declarative import declarative_base
 
+Base = declarative_base()
 
-class User(BaseModel):
-    username: str
-    email: str | None = None
-    full_name: str | None = None
-    disabled: bool | None = None
+class User(Base):
+    __tablename__ = 'users'
 
-
-class UserWithPassword(User):
-    hashed_password: str
+    id: int = Column(Integer, primary_key=True)
+    lang_id: int = Column(Integer)
+    username: str = Column(String, unique=True)
+    password: str = Column(String)
