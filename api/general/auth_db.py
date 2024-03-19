@@ -13,6 +13,8 @@ router = APIRouter(
 
 @router.post("/token")
 def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
-    user = validate_login(db, form_data.username, form_data.password)
+    user, error_message = validate_login(db, form_data.username, form_data.password)
+    if not user:
+        raise HTTPException(status_code=400, detail=error_message)
     return {"access_token": user.username, "token_type": "bearer"}
 
