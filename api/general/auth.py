@@ -2,9 +2,9 @@ from fastapi import FastAPI, Depends, HTTPException, APIRouter, status
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 from infrastructure.mysql import get_db
-from service.auth import validate_login, fake_decode_token
+from service.auth import validate_login
 from schema.database.user import User
-from repository.user import get_user
+from repository.user import get_user_data
 
 
 router = APIRouter(
@@ -18,7 +18,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
     # username = fake_decode_token(token,db)
-    user = get_user(db, token)
+    user = get_user_data(db, token)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
