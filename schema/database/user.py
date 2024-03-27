@@ -1,12 +1,15 @@
-from pydantic import BaseModel
+from sqlalchemy import Column, Integer, String
 
+from infrastructure.mysql import Base
 
-class User(BaseModel):
-    username: str
-    email: str | None = None
-    full_name: str | None = None
-    disabled: bool | None = None
+class User(Base):
+    __tablename__ = 'users'
+
+    id: int = Column(Integer, primary_key=True)
+    lang_id: int = Column(Integer)
+    username: str = Column(String, unique=True)
+
 
 
 class UserWithPassword(User):
-    hashed_password: str
+    password: str = Column(String)
