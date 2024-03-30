@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 import repository.event
 from infrastructure.mysql import get_db
-from schema.database.event import EventCreate
+from schema.database.event import EventCreate, EventUpdate
 
 router = APIRouter(
     tags=["event"],
@@ -36,13 +36,13 @@ def create_event(event: EventCreate, db: Session = Depends(get_db)):
 def delete(event_id: int, db: Session = Depends(get_db)):
     event = repository.event.get_event(db, event_id)
     return repository.event.delete(db=db, event=event)
-#
-#
-# @router.patch("/{post_id}", tags=["Post"])
-# def update_post(post_id: int, post_update: PostUpdate, db: Session = Depends(get_db)):
-#     existing_post = repository.post.get_post(db, post_id)
-#     if existing_post is None:
-#         raise HTTPException(status_code=404, detail="Post not found")
-#     updated_post = repository.post.patch_post(db, post_id, post_update)
-#     return updated_post
-#
+
+
+@router.patch("/{event_id}")
+def update_event(event_id: int, event_update: EventUpdate, db: Session = Depends(get_db)):
+    existing_event = repository.event.get_event(db, event_id)
+    if existing_event is None:
+        raise HTTPException(status_code=404, detail="Post not found")
+    updated_post = repository.event.patch_event(db, event_id, event_update)
+    return updated_post
+

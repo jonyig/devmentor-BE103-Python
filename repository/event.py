@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 
 from database.event import Event
-from schema.database.event import EventCreate
+from schema.database.event import EventCreate, EventUpdate
 
 
 def lists(db: Session, skip: int = 0, limit: int = 100):
@@ -23,14 +23,14 @@ def get_event(db: Session, event_id: int):
 def delete(db: Session, event: Event):
     db.delete(event)
     db.commit()
-#
-#
-# def patch_post(db: Session, post_id: int, post_update: PostUpdate):
-#     db_post = get_post(db, post_id)
-#     if db_post:
-#         for field, value in post_update.dict(exclude_unset=True).items():
-#             setattr(db_post, field, value)
-#         db.commit()
-#         db.refresh(db_post)
-#         return db_post
-#     return None
+
+
+def patch_event(db: Session, event_id: int, event_update: EventUpdate):
+    db_event = get_event(db, event_id)
+    if db_event:
+        for field, value in event_update.dict(exclude_unset=True).items():
+            setattr(db_event, field, value)
+        db.commit()
+        db.refresh(db_event)
+        return db_event
+    return None

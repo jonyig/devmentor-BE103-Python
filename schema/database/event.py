@@ -1,3 +1,5 @@
+from typing import Optional
+
 from pydantic import BaseModel
 
 class EventBase(BaseModel):
@@ -11,6 +13,12 @@ class EventCreate(EventBase):
 
 class Event(EventBase):
     id: int
+
+class EventUpdate(BaseModel):
+    name: Optional[str]
+    date: Optional[str]
+    content: Optional[str]
+
 
     class Config:
         orm_mode = True
