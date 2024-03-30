@@ -18,11 +18,11 @@ def create(db: Session, event: EventCreate):
 
 def get_event(db: Session, event_id: int):
     return db.query(Event).filter(Event.id == event_id).first()
-#
-#
-# def delete(db: Session, post: Post):
-#     db.delete(post)
-#     db.commit()
+
+
+def delete(db: Session, event: Event):
+    db.delete(event)
+    db.commit()
 #
 #
 # def patch_post(db: Session, post_id: int, post_update: PostUpdate):

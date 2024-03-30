@@ -30,12 +30,12 @@ def get_event(event_id: int, db: Session = Depends(get_db)):
 @router.post("")
 def create_event(event: EventCreate, db: Session = Depends(get_db)):
     return repository.event.create(db=db, event=event)
-#
-#
-# @router.delete("/{post_id}", tags=["Post"])
-# def delete(post_id: int, db: Session = Depends(get_db)):
-#     post = repository.post.get_post(db, post_id)
-#     return repository.post.delete(db=db, post=post)
+
+
+@router.delete("/{event_id}")
+def delete(event_id: int, db: Session = Depends(get_db)):
+    event = repository.event.get_event(db, event_id)
+    return repository.event.delete(db=db, event=event)
 #
 #
 # @router.patch("/{post_id}", tags=["Post"])
