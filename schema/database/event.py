@@ -1,13 +1,16 @@
-from sqlalchemy import Column, Integer, String
+from pydantic import BaseModel
 
-from infrastructure.mysql import Base
+class EventBase(BaseModel):
+    user_id: int
+    name: str
+    date: str
+    content: str | None = None
 
-class Event(Base):
-    __tablename__ = 'events'
+class EventCreate(EventBase):
+    pass
 
-    id: int = Column(Integer, primary_key=True)
-    user_id: int = Column(Integer)
-    name: str = Column(String, unique=True)
-    date: str = Column(String)
-    content: str = Column(String)
+class Event(EventBase):
+    id: int
 
+    class Config:
+        orm_mode = True

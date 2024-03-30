@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from schema.database.user import User,UserWithPassword
+from database.user import User,UserWithPassword
 
 def get_user(db: Session, username: str):
     return db.query(UserWithPassword).filter(UserWithPassword.username == username).first()

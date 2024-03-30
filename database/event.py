@@ -9,7 +9,7 @@ class Event(Base):
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer)
     name = Column(String, unique=True)
-    date= Column(String)
+    date = Column(String)
     content = Column(String)
 
 

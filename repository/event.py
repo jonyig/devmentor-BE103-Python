@@ -1,19 +1,21 @@
 from sqlalchemy.orm import Session
+
 from database.event import Event
+from schema.database.event import EventCreate
 
 
 def lists(db: Session, skip: int = 0, limit: int = 100):
     return db.query(Event).offset(skip).limit(limit).all()
 
 
-# def create(db: Session, post: PostCreate):
-#     db_user = Post(title=post.title, content=post.content)
-#     db.add(db_user)
-#     db.commit()
-#     db.refresh(db_user)
-#     return db_user
-#
-#
+def create(db: Session, event: EventCreate):
+    db_user = Event(user_id=event.user_id, name=event.name, date=event.date, content=event.content)
+    db.add(db_user)
+    db.commit()
+    db.refresh(db_user)
+    return db_user
+
+
 def get_event(db: Session, event_id: int):
     return db.query(Event).filter(Event.id == event_id).first()
 #

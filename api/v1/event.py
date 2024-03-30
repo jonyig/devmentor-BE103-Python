@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 
 import repository.event
 from infrastructure.mysql import get_db
+from schema.database.event import EventCreate
 
 router = APIRouter(
     tags=["event"],
@@ -18,7 +19,6 @@ def list_event(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     return events
 
 
-
 @router.get("/{event_id}")
 def get_event(event_id: int, db: Session = Depends(get_db)):
     event = repository.event.get_event(db, event_id)
@@ -27,10 +27,9 @@ def get_event(event_id: int, db: Session = Depends(get_db)):
     return event
 
 
-
-# @router.post("", tags=["Post"])
-# def create_post(post: PostCreate, db: Session = Depends(get_db)):
-#     return repository.post.create(db=db, post=post)
+@router.post("")
+def create_event(event: EventCreate, db: Session = Depends(get_db)):
+    return repository.event.create(db=db, event=event)
 #
 #
 # @router.delete("/{post_id}", tags=["Post"])

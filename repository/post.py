@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 
 from database.post import Post
-from database.postupdate import PostUpdate
+from schema.database.postupdate import PostUpdate
 from schema.database.post import PostCreate
 
 
