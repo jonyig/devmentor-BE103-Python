@@ -1,9 +1,7 @@
 from sqlalchemy.orm import Session
-
 from database.event import Event
-from database.subscribe import Subscribe
 from schema.database.event import EventCreate, EventUpdate
-from schema.database.subscribe import SubscribeBase
+
 
 
 def lists(db: Session, skip: int = 0, limit: int = 100):
@@ -37,12 +35,3 @@ def patch_event(db: Session, event_id: int, event_update: EventUpdate):
         return db_event
     return None
 
-def subscribe(db: Session, event_id: int, subscribe: SubscribeBase):
-    db_subscribe = Subscribe(user_id=subscribe.user_id, event_id=event_id)
-    db.add(db_subscribe)
-    db.commit()
-    db.refresh(db_subscribe)
-    return db_subscribe
-
-def get_subscriptions(db: Session, user_id: int):
-    return db.query(Subscribe).filter(Subscribe.user_id == user_id).all()

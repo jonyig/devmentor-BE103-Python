@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 import repository.event
+import repository.subscribe
 from infrastructure.mysql import get_db
 from schema.database.event import EventCreate, EventUpdate
 from schema.database.subscribe import SubscribeBase
@@ -50,9 +51,9 @@ def update_event(event_id: int, event_update: EventUpdate, db: Session = Depends
 
 @router.post("/{event_id}/subscribers")
 def subscribe(event_id: int, subscribe: SubscribeBase, db: Session = Depends(get_db)):
-    return repository.event.subscribe(db=db, event_id=event_id, subscribe=subscribe)
+    return repository.subscribe.subscribe(db=db, event_id=event_id, subscribe=subscribe)
 
 @router.get("/users/{user_id}/subscriptions")
 def get_subscriptions(user_id: int, db: Session = Depends(get_db)):
-    user_subscriptions = repository.event.get_subscriptions(db=db, user_id=user_id)
+    user_subscriptions = repository.subscribe.get_subscriptions(db=db, user_id=user_id)
     return user_subscriptions
