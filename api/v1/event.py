@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 import repository.event
 from infrastructure.mysql import get_db
 from schema.database.event import EventCreate, EventUpdate
+from schema.database.subscribe import SubscribeBase
 
 router = APIRouter(
     tags=["event"],
@@ -23,7 +24,7 @@ def list_event(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
 def get_event(event_id: int, db: Session = Depends(get_db)):
     event = repository.event.get_event(db, event_id)
     if event is None:
-        raise HTTPException(status_code=404, detail="Post not found")
+        raise HTTPException(status_code=404, detail="Event not found")
     return event
 
 
@@ -42,7 +43,16 @@ def delete(event_id: int, db: Session = Depends(get_db)):
 def update_event(event_id: int, event_update: EventUpdate, db: Session = Depends(get_db)):
     existing_event = repository.event.get_event(db, event_id)
     if existing_event is None:
-        raise HTTPException(status_code=404, detail="Post not found")
+        raise HTTPException(status_code=404, detail="Event not found")
     updated_post = repository.event.patch_event(db, event_id, event_update)
     return updated_post
 
+
+@router.post("/{event_id}/subscribers")
+def subscribe(event_id: int, subscribe: SubscribeBase, db: Session = Depends(get_db)):
+    return repository.event.subscribe(db=db, event_id=event_id, subscribe=subscribe)
+
+@router.get("/users/{user_id}/subscriptions")
+def get_subscriptions(user_id: int, db: Session = Depends(get_db)):
+    user_subscriptions = repository.event.get_subscriptions(db=db, user_id=user_id)
+    return user_subscriptions
