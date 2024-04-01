@@ -1,23 +1,16 @@
-from database.event import Event
 from sqlalchemy.orm import Session
-from schema.database.event import EventUpdate
+from schema.database.event import EventUpdate, Event
+from repository.event import patch_event, get_event
+from repository.event import delete as delete_event_repo
 
+def patch(db: Session, event_id: int, event_update: EventUpdate):
+    existing_event = get_event(db, event_id)
+    if existing_event is None:
+        return None
+    return patch_event(db, event_id, event_update)
 
-def get_event(db: Session, event_id: int):
-    return db.query(Event).filter(Event.id == event_id).first()
-
+def get_event_by_id(db: Session, event_id: int):
+    return get_event(db, event_id)
 
 def delete(db: Session, event: Event):
-    db.delete(event)
-    db.commit()
-
-
-def patch_event(db: Session, event_id: int, event_update: EventUpdate):
-    db_event = get_event(db, event_id)
-    if db_event:
-        for field, value in event_update.dict(exclude_unset=True).items():
-            setattr(db_event, field, value)
-        db.commit()
-        db.refresh(db_event)
-        return db_event
-    return None
+    delete_event_repo(db=db, event=event)
