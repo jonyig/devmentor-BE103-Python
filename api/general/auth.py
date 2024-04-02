@@ -1,9 +1,9 @@
-from fastapi import FastAPI, Depends, HTTPException, APIRouter, status
+from fastapi import Depends, HTTPException, APIRouter, status
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 from infrastructure.mysql import get_db
 from service.auth import validate_login
-from schema.database.user import User
+from database.user import User
 from repository.user import get_user_data
 
 
@@ -36,6 +36,7 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
     elif user is False:
         raise HTTPException(status_code=400, detail="Incorrect username or password")
     return {"access_token": user.username, "token_type": "bearer"}
+
 
 
 @router.get("/users/me")

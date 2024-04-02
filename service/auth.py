@@ -1,4 +1,4 @@
-from schema.database.user import User, UserWithPassword
+from database.user import UserWithPassword
 from sqlalchemy.orm import Session
 from repository.user import get_user
 
