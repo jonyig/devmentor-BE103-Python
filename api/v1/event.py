@@ -23,7 +23,7 @@ def list_event(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
 
 @router.get("/{event_id}")
 def get_event(event_id: int, db: Session = Depends(get_db)):
-    event = service.event.get_event(db, event_id)
+    event = service.event.get_event_by_id(db, event_id)
     if event is None:
         raise HTTPException(status_code=404, detail="Event not found")
     return event
