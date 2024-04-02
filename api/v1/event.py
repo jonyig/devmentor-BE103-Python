@@ -3,9 +3,11 @@ from sqlalchemy.orm import Session
 import service.event
 import repository.event
 import repository.subscribe
+from api.general.auth import get_current_user
 from infrastructure.mysql import get_db
 from schema.database.event import EventCreate, EventUpdate
 from schema.database.subscribe import SubscribeBase
+from database.user import User
 
 router = APIRouter(
     tags=["event"],
@@ -16,13 +18,13 @@ router = APIRouter(
 # 獲取全部 （get) /v1/events
 # 獲取單個 （get)  /v1/events/(/{event_id})
 @router.get("")
-def list_event(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+def list_event(skip: int = 0, limit: int = 100, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     events = repository.event.lists(db, skip=skip, limit=limit)
     return events
 
 
 @router.get("/{event_id}")
-def get_event(event_id: int, db: Session = Depends(get_db)):
+def get_event(event_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     event = service.event.get_event_by_id(db, event_id)
     if event is None:
         raise HTTPException(status_code=404, detail="Event not found")
@@ -30,12 +32,12 @@ def get_event(event_id: int, db: Session = Depends(get_db)):
 
 
 @router.post("")
-def create_event(event: EventCreate, db: Session = Depends(get_db)):
+def create_event(event: EventCreate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     return repository.event.create(db=db, event=event)
 
 
 @router.delete("/{event_id}")
-def delete(event_id: int, db: Session = Depends(get_db)):
+def delete(event_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     event = service.event.get_event(db, event_id)
     if event is None:
         raise HTTPException(status_code=404, detail="Event not found")
@@ -43,7 +45,7 @@ def delete(event_id: int, db: Session = Depends(get_db)):
 
 
 @router.patch("/{event_id}")
-def update_event(event_id: int, event_update: EventUpdate, db: Session = Depends(get_db)):
+def update_event(event_id: int, event_update: EventUpdate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     existing_event = service.event.get_event_by_id(db, event_id)
     if existing_event is None:
         raise HTTPException(status_code=404, detail="Event not found")
@@ -52,10 +54,10 @@ def update_event(event_id: int, event_update: EventUpdate, db: Session = Depends
 
 
 @router.post("/{event_id}/subscribers")
-def subscribe(event_id: int, subscribe: SubscribeBase, db: Session = Depends(get_db)):
+def subscribe(event_id: int, subscribe: SubscribeBase, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     return repository.subscribe.subscribe(db=db, event_id=event_id, subscribe=subscribe)
 
 @router.get("/users/{user_id}/subscriptions")
-def get_subscriptions(user_id: int, db: Session = Depends(get_db)):
+def get_subscriptions(user_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     user_subscriptions = repository.subscribe.get_subscriptions(db=db, user_id=user_id)
     return user_subscriptions

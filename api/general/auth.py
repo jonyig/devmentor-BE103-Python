@@ -17,7 +17,6 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
 async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
-    # username = fake_decode_token(token,db)
     user = get_user_data(db, token)
     if not user:
         raise HTTPException(
