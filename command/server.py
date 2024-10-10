@@ -21,5 +21,5 @@ class ServerCreator:
 
 
 server_creator = ServerCreator()
-server_creator.database_init()
+# server_creator.database_init()
 app = server_creator.get_app()
